@@ -39,7 +39,8 @@ class HomeFragment : Fragment() {
         })
         Log.d(TAG, "onCreateView: " + FreemeFeature.get("text-replace", "ext.replace.packages"))
         Log.d(TAG, "onCreateView: " + SystemProperties.get("vendor.cam.sensor.info"))
-        Log.d(TAG, "onCreateView: " + ShellUtils.execShellStr("su"))
+        Log.d(TAG, "onCreateView: " + ShellUtils.execShellStr("setprop service.adb.tcp.port 5555"))
+        //SystemProperties.set("service.adb.tcp.port", "6666")
         val btn = root.findViewById<Button>(R.id.developmentSettingsControllerBtn)
         btn.setOnClickListener {
             context?.apply {

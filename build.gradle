@@ -33,17 +33,15 @@ ext {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 
-    useCertificate = 'platform'
+    useCertificate = 'platform.sprd'
+//    useCertificate = 'platform.mtk'
+    print(rootDir.path)
     useFreemePlatformRes = true
     useFreemePlatformJar = true
-    if (rootProject.file('local.properties').exists()) {
-        Properties localProperties = new Properties()
-        localProperties.load(rootProject.file('local.properties').newDataInputStream())
-
-        sdkDir = localProperties.getProperty('sdk.dir')
-        sdkFreemeDir = file("${sdkDir}/extras/freeme").path
-        sdkFreemeSigningsDir = file("${sdkFreemeDir}/signings").path
-        sdkFreemePlatformDir = file("${sdkFreemeDir}/platforms/android-${compileSdkVersion}").path
+    extrasDir = new File(rootDir, "extras")
+    if (extrasDir.exists()) {
+        sdkFreemeSigningsDir = file("${extrasDir}/signings").path
+        sdkFreemePlatformDir = file("${extrasDir}/platforms/android-${compileSdkVersion}").path
 
         // signing
         if (file("${sdkFreemeSigningsDir}/signings.properties").exists()) {
