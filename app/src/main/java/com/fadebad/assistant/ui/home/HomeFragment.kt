@@ -9,20 +9,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.freeme.util.FreemeFeature
+import androidx.lifecycle.observe
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.fadebad.assistant.R
 import com.fadebad.assistant.util.ShellUtils
+import com.freeme.util.FreemeFeature
 
 class HomeFragment : Fragment() {
     private val TAG = "HomeFragment"
 
     private lateinit var homeViewModel: HomeViewModel
+    private lateinit var homeRecyclerView: RecyclerView
+    private lateinit var homeAdapter: HomeAdapter
+    private lateinit var homeLayoutManager: GridLayoutManager
 
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     override fun onCreateView(
@@ -33,10 +37,9 @@ class HomeFragment : Fragment() {
         homeViewModel =
                 ViewModelProvider(this).get(HomeViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
-        val textView: TextView = root.findViewById(R.id.text_home)
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
+        homeRecyclerView = root.findViewById(R.id.homeRecyclerView)
+        setupRecyclerView()
+
         Log.d(TAG, "onCreateView: " + FreemeFeature.get("text-replace", "ext.replace.packages"))
         Log.d(TAG, "onCreateView: " + SystemProperties.get("vendor.cam.sensor.info"))
         Log.d(TAG, "onCreateView: " + ShellUtils.execShellStr("setprop service.adb.tcp.port 5555"))
@@ -53,5 +56,28 @@ class HomeFragment : Fragment() {
             }
         }
         return root
+    }
+
+    private fun setupRecyclerView() {
+        homeAdapter = HomeAdapter(homeViewModel)
+        homeLayoutManager = GridLayoutManager(context, 3)
+        homeRecyclerView.adapter = homeAdapter
+        homeRecyclerView.layoutManager = homeLayoutManager
+        homeLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return when (homeViewModel.shortCuts.value!![position].type) {
+                    0 -> 3
+                    1 -> 1
+                    2 -> 1
+                    else -> 3
+                }
+            }
+        }
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        homeViewModel.getShortCuts()
     }
 }

@@ -33,8 +33,8 @@ ext {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 
-    useCertificate = 'platform.sprd'
-//    useCertificate = 'platform.mtk'
+    // useCertificate = 'platform.sprd'
+    useCertificate = 'platform.mtk'
     print(rootDir.path)
     useFreemePlatformRes = true
     useFreemePlatformJar = true
