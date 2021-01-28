@@ -1,4 +1,6 @@
 package com.fadebad.assistant.logic.home.model
 
-data class ShortCut(val id: Int, val label: String, val icon:String, val category: Int, val type: Int) {
+import com.fadebad.assistant.logic.`interface`.ShortCutFunc
+
+data class ShortCut(val id:  Int = 0, val label: String, val icon:Int, val category: Int, val type: Int, val funcImpl: ShortCutFunc?) {
 }

@@ -1,15 +1,16 @@
 package com.fadebad.assistant.ui.home
 
-import android.os.Build
-import android.os.Bundle
-import android.os.SystemProperties
+import android.content.Context
+import android.os.*
 import android.provider.Settings
+import android.service.oemlock.OemLockManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider

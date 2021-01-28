@@ -1,11 +1,14 @@
 package com.fadebad.assistant.ui.home
 
+import android.content.res.ColorStateList
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Switch
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.fadebad.assistant.R
 
@@ -55,6 +58,7 @@ class HomeAdapter(private val mainViewModel: HomeViewModel) :
 
     override fun getItemCount() = mainViewModel.shortCuts.value!!.size
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val data = mainViewModel.shortCuts.value!![position]
         when (holder) {
@@ -63,6 +67,19 @@ class HomeAdapter(private val mainViewModel: HomeViewModel) :
             }
             is SwitchViewHolder -> {
                 holder.shortCutLabel.text = data.label
+                holder.shortCutIcon.setImageResource(data.icon)
+                val lastValue = data.funcImpl?.get<Boolean>(holder.itemView.context)?.let { it } ?: false
+                holder.shortCutIcon.imageTintList = ColorStateList.valueOf(
+                        if (lastValue) 0xff05A7C4.toInt() else 0xff555555.toInt()
+                )
+                holder.itemView.setOnClickListener {
+                    val lastValue = data.funcImpl?.get<Boolean>(holder.itemView.context)?.let { it } ?: false
+                    val newValue = !lastValue
+                    data.funcImpl?.set(holder.itemView.context, newValue)
+                    holder.shortCutIcon.imageTintList = ColorStateList.valueOf(
+                            if (newValue) 0xff05A7C4.toInt() else 0xff555555.toInt()
+                    )
+                }
             }
             is IntentViewHolder -> {
                 holder.shortCutLabel.text = data.label
